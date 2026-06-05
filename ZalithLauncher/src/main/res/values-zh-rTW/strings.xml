@@ -398,7 +398,6 @@
     <string name="game_styles_joystick_hide_when_gamepad">使用手把時隱藏</string>
     <string name="game_styles_save_failed">儲存樣式失敗</string>
     <string name="game_saponsorship_finished_game">啟動器已成功執行遊戲 %s 次！如果您覺得好用，可以考慮贊助支持作者喔！qwq</string>
-
     <string name="game_vulkan_check_title">Vulkan 檢測</string>
     <string name="game_vulkan_check_text">檢查您的裝置是否支援使用 Vulkan 執行 Minecraft 26.2+，結果僅供參考</string>
     <string name="game_vulkan_check_version">Vulkan 版本：%s</string>
