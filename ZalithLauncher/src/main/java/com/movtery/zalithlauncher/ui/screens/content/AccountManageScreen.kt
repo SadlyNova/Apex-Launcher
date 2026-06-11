@@ -8,12 +8,14 @@
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/gpl-3.0.txt>.
+ * along with this program.
+ * If not, see <https://www.gnu.org/licenses/gpl-3.0.txt>.
  */
 
 package com.movtery.zalithlauncher.ui.screens.content
@@ -104,8 +106,7 @@ import com.movtery.zalithlauncher.viewmodel.ScreenBackStackViewModel
 
 /**
  * 封装账号界面 UI 交互的回调函数
- * 
- * @property onIntent 发送 MVI Intent 到 ViewModel
+ * * @property onIntent 发送 MVI Intent 到 ViewModel
  * @property openLink 打开外部链接
  * @property backToMainScreen 返回主界面
  * @property navigateToWeb 导航到应用内浏览器界面
@@ -352,12 +353,8 @@ private fun ActionsLayout(
             modifier = Modifier
                 .fillMaxWidth(),
             onClick = {
-                if (isOffline) {
-                    //非正版状态下，只允许创建微软账号
-                    actions.onIntent(AccountManageIntent.UpdateMicrosoftLoginOp(MicrosoftLoginOperation.Tip))
-                } else {
-                    actions.onIntent(AccountManageIntent.UpdateLoginMenuOp(LoginMenuOperation.Login))
-                }
+                // 🔥 FIXED: Removing isOffline check. Now it will always show the full menu!
+                actions.onIntent(AccountManageIntent.UpdateLoginMenuOp(LoginMenuOperation.Login))
             }
         ) {
             MarqueeText(text = stringResource(R.string.account_add_new_account))
@@ -714,7 +711,7 @@ private fun AccountsLayout(
                             .padding(vertical = 6.dp),
                         currentAccount = currentAccount,
                         account = account,
-                        enabled = !isOffline, //非正版状态下不允许选择任何状态
+                        enabled = true, // 🔥 FIXED: Always allow account selection
                         onSelected = { AccountsManager.setCurrentAccount(it) },
                         openChangeSkinDialog = {
                             if (!account.isAuthServerAccount()) {
