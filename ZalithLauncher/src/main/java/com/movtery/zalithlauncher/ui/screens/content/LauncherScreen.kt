@@ -175,36 +175,8 @@ private fun ContentMenu(
             .offset { IntOffset(x = 0, y = yOffset.roundToPx()) },
         contentPadding = PaddingValues(all = 12.dp)
     ) {
-        if (BuildConfig.DEBUG) {
-            item {
-                //debug版本关不掉的警告，防止有人把测试版当正式版用 XD
-                BackgroundCard(
-                    shape = MaterialTheme.shapes.extraLarge,
-                    modifier = Modifier.padding(bottom = 12.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.generic_warning),
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Text(
-                            text = stringResource(R.string.launcher_version_debug_warning, BuildKeys.LAUNCHER_NAME),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        Text(
-                            modifier = Modifier
-                                .alpha(0.8f)
-                                .align(Alignment.End),
-                            text = stringResource(R.string.launcher_version_debug_warning_cant_close),
-                            style = MaterialTheme.typography.bodySmall
-                        )
-                    }
-                }
-            }
-        }
+        
+        // 🚀 THE ANNOYING "TEST VERSION" WARNING BLOCK HAS BEEN DELETED FROM HERE! 
 
         when (val state = pageState) {
             is HomePageState.Blank -> {}
