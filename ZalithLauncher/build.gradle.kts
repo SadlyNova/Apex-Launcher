@@ -13,7 +13,7 @@ plugins {
     id("com.movtery.buildkeys")
 }
 
-// 🔥 PACKAGE NAME CHANGED HERE 🔥
+// 🔥 Naya App ID (Aapke phone mein is naam se install hoga)
 val zalithPackageName = "com.sadly.apex"
 
 val launcherAPPName = project.findProperty("launcher_app_name") as? String ?: error("The \"launcher_app_name\" property is not set in gradle.properties.")
@@ -43,7 +43,8 @@ fun getKeyFromLocal(envKey: String, fileName: String? = null, default: String? =
 }
 
 android {
-    namespace = zalithPackageName
+    // 🔥 NINJA FIX: Internal code ke liye purana namespace taaki 'R' unresolved na ho
+    namespace = "com.movtery.zalithlauncher"
     compileSdk = 37
 
     signingConfigs {
@@ -62,8 +63,8 @@ android {
     }
 
     defaultConfig {
+        // 🔥 Asli App ID yahan set ho raha hai
         applicationId = zalithPackageName
-        // 🔥 REMOVED THE ".v2" SUFFIX TO KEEP IT CLEAN AS "com.sadly.apex" 🔥
         applicationIdSuffix = ""
         minSdk = 26
         targetSdk = 35
@@ -84,7 +85,6 @@ android {
         }
         debug {
             isMinifyEnabled = false
-            // 🔥 REMOVED THE ".debug" SUFFIX TO KEEP IT CLEAN AS "com.sadly.apex" 🔥
             applicationIdSuffix = ""
             versionNameSuffix = "-debug"
             signingConfig = signingConfigs.getByName("debugBuild")
