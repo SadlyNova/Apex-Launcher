@@ -1,11 +1,12 @@
 /*
  * Apex Launcher 
- * Ultra-Premium High-Quality Dashboard (Error Free)
+ * Ultra-Premium High-Quality Dashboard (With Real Image Background)
  */
 
 package com.movtery.zalithlauncher.ui.screens.content
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -22,12 +23,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.UriHandler
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
@@ -35,6 +38,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.movtery.zalithlauncher.R
 import com.movtery.zalithlauncher.game.account.AccountsManager
 import com.movtery.zalithlauncher.game.version.installed.Version
 import com.movtery.zalithlauncher.game.version.installed.VersionsManager
@@ -111,16 +115,28 @@ private fun ApexDashboardContent(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
-            // 🔥 PREMIUM BANNER WITH GLOW (Safe Version without missing images)
+            // 🔥 PREMIUM BANNER WITH REAL IMAGE
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(140.dp)
+                    .height(160.dp) // Thoda lamba kiya taaki image mast dikhe
                     .clip(RoundedCornerShape(20.dp))
-                    .background(Brush.linearGradient(listOf(Color(0xFF2E1065), Color(0xFF0F0518))))
+                    .background(Color(0xFF0F0518))
             ) {
-                // Dark Gradient to make text pop
-                Box(modifier = Modifier.fillMaxSize().background(Brush.horizontalGradient(listOf(Color(0xCC050508), Color.Transparent))))
+                // Aapki nayi wallpaper image yahan render hogi
+                Image(
+                    painter = painterResource(R.drawable.apex_bg), 
+                    contentDescription = "Epic Banner Background",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+                
+                // Image ke upar dark fade taaki text clearly padha ja sake
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Brush.horizontalGradient(listOf(Color(0xEE050508), Color(0x88050508), Color.Transparent)))
+                )
 
                 Column(
                     modifier = Modifier.padding(20.dp).align(Alignment.CenterStart),
@@ -207,7 +223,7 @@ private fun ApexRightProfilePanel(
     Card(
         modifier = modifier.offset { IntOffset(x = xOffset.roundToPx(), y = 0) },
         colors = CardDefaults.cardColors(containerColor = Color(0xFF101018).copy(alpha = 0.9f)),
-        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.05f)), // Subtle glass border
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.05f)),
         shape = RoundedCornerShape(24.dp)
     ) {
         Column(
