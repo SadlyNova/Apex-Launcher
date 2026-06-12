@@ -1,12 +1,11 @@
 /*
  * Apex Launcher 
- * Ultra-Premium High-Quality Dashboard (Mobile Landscape)
+ * Ultra-Premium High-Quality Dashboard (Error Free)
  */
 
 package com.movtery.zalithlauncher.ui.screens.content
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -23,14 +22,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.UriHandler
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
@@ -38,7 +35,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.movtery.zalithlauncher.R
 import com.movtery.zalithlauncher.game.account.AccountsManager
 import com.movtery.zalithlauncher.game.version.installed.Version
 import com.movtery.zalithlauncher.game.version.installed.VersionsManager
@@ -115,7 +111,7 @@ private fun ApexDashboardContent(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
-            // 🔥 PREMIUM BANNER WITH IMAGE OVERLAY & GLOW
+            // 🔥 PREMIUM BANNER WITH GLOW (Safe Version without missing images)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -123,14 +119,6 @@ private fun ApexDashboardContent(
                     .clip(RoundedCornerShape(20.dp))
                     .background(Brush.linearGradient(listOf(Color(0xFF2E1065), Color(0xFF0F0518))))
             ) {
-                // Background Pattern/Image placeholder (You can replace R.drawable.ic_launcher_background with an actual cool gaming image)
-                Image(
-                    painter = painterResource(R.drawable.ic_launcher_background), 
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize().alpha(0.2f)
-                )
-                
                 // Dark Gradient to make text pop
                 Box(modifier = Modifier.fillMaxSize().background(Brush.horizontalGradient(listOf(Color(0xCC050508), Color.Transparent))))
 
@@ -183,7 +171,7 @@ private fun ApexDashboardContent(
 fun ApexStatCard(modifier: Modifier, icon: ImageVector, title: String, value: String) {
     Card(
         modifier = modifier.height(72.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF151520).copy(alpha = 0.8f)), // Slight transparency
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF151520).copy(alpha = 0.8f)), 
         border = BorderStroke(1.dp, Color(0xFF8B5CF6).copy(alpha = 0.3f)), // Neon Outline
         shape = RoundedCornerShape(16.dp)
     ) {
@@ -237,7 +225,7 @@ private fun ApexRightProfilePanel(
             Text(text = account?.username ?: "Guest", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
             
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 4.dp)) {
-                Box(modifier = Modifier.size(8.dp).background(Color(0xFF10B981), CircleShape)) // Changed to Green for 'Online/Ready' vibe
+                Box(modifier = Modifier.size(8.dp).background(Color(0xFF10B981), CircleShape)) 
                 Spacer(modifier = Modifier.width(6.dp))
                 Text("Ready", color = Color(0xFFAAAAAA), fontSize = 12.sp)
             }
@@ -259,7 +247,7 @@ private fun ApexRightProfilePanel(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column(modifier = Modifier.weight(1f)) {
-                    Text("Selected Profile", color = Color(0xFF8B5CF6), fontSize = 10.sp, fontWeight = FontWeight.Bold) // Neon subtitle
+                    Text("Selected Profile", color = Color(0xFF8B5CF6), fontSize = 10.sp, fontWeight = FontWeight.Bold) 
                     Text(version?.getVersionName() ?: "No Version", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
                 IconButton(onClick = toVersionSettingsScreen, modifier = Modifier.size(28.dp)) {
