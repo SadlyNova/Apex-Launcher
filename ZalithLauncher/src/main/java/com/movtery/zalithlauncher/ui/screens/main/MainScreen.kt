@@ -1,57 +1,21 @@
 /*
- * Apex Launcher (Custom UI Framework)
+ * Apex Launcher - Mobile Optimized
  */
 
 package com.movtery.zalithlauncher.ui.screens.main
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Build
-import androidx.compose.material.icons.rounded.Home
-import androidx.compose.material.icons.rounded.List
-import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.Place
-import androidx.compose.material.icons.rounded.Settings
-import androidx.compose.material.icons.rounded.ShoppingCart
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.material.icons.rounded.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -69,7 +33,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
-import com.movtery.zalithlauncher.BuildKeys
 import com.movtery.zalithlauncher.R
 import com.movtery.zalithlauncher.coroutine.Task
 import com.movtery.zalithlauncher.coroutine.TaskSystem
@@ -82,20 +45,7 @@ import com.movtery.zalithlauncher.ui.screens.BackStackNavKey
 import com.movtery.zalithlauncher.ui.screens.NestedNavKey
 import com.movtery.zalithlauncher.ui.screens.NormalNavKey
 import com.movtery.zalithlauncher.ui.screens.TitledNavKey
-import com.movtery.zalithlauncher.ui.screens.content.AccountManageScreen
-import com.movtery.zalithlauncher.ui.screens.content.DownloadScreen
-import com.movtery.zalithlauncher.ui.screens.content.FileSelectorScreen
-import com.movtery.zalithlauncher.ui.screens.content.HomePageEditorScreen
-import com.movtery.zalithlauncher.ui.screens.content.LauncherScreen
-import com.movtery.zalithlauncher.ui.screens.content.LicenseScreen
-import com.movtery.zalithlauncher.ui.screens.content.LogViewScreen
-import com.movtery.zalithlauncher.ui.screens.content.MultiplayerScreen
-import com.movtery.zalithlauncher.ui.screens.content.SettingsScreen
-import com.movtery.zalithlauncher.ui.screens.content.VersionExportScreen
-import com.movtery.zalithlauncher.ui.screens.content.VersionSettingsScreen
-import com.movtery.zalithlauncher.ui.screens.content.VersionsManageScreen
-import com.movtery.zalithlauncher.ui.screens.content.WebViewScreen
-import com.movtery.zalithlauncher.ui.screens.content.navigateToDownload
+import com.movtery.zalithlauncher.ui.screens.content.*
 import com.movtery.zalithlauncher.ui.screens.navigateTo
 import com.movtery.zalithlauncher.ui.screens.onBack
 import com.movtery.zalithlauncher.ui.screens.rememberTransitionSpec
@@ -107,7 +57,6 @@ import com.movtery.zalithlauncher.utils.animation.getAnimateTween
 import com.movtery.zalithlauncher.utils.file.formatFileSize
 import com.movtery.zalithlauncher.viewmodel.ErrorViewModel
 import com.movtery.zalithlauncher.viewmodel.EventViewModel
-import com.movtery.zalithlauncher.viewmodel.LocalBackgroundViewModel
 import com.movtery.zalithlauncher.viewmodel.ModpackImportViewModel
 import com.movtery.zalithlauncher.viewmodel.ScreenBackStackViewModel
 import com.movtery.zalithlauncher.viewmodel.sendKeepScreen
@@ -122,11 +71,7 @@ fun MainScreen(
     val tasks by TaskSystem.tasksFlow.collectAsStateWithLifecycle()
 
     LaunchedEffect(tasks) {
-        if (tasks.isEmpty()) {
-            eventViewModel.sendKeepScreen(false)
-        } else {
-            eventViewModel.sendKeepScreen(true)
-        }
+        eventViewModel.sendKeepScreen(tasks.isNotEmpty())
     }
 
     val isTaskMenuExpanded = AllSettings.launcherTaskMenuExpanded.state
@@ -142,8 +87,7 @@ fun MainScreen(
     val mainScreenKey = screenBackStackModel.mainScreen.currentKey
     val inLauncherScreen = mainScreenKey == null || mainScreenKey is NormalNavKey.LauncherMain
 
-    // 🔥 Apex Deep Space Background
-    val apexBgColor = Color(0xFF050508) 
+    val apexBgColor = Color(0xFF050508)
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -155,7 +99,7 @@ fun MainScreen(
                 .applyFullscreen(AllSettings.launcherFullScreen.state)
                 .fillMaxSize()
         ) {
-            // 🔥 APEX LEFT SIDEBAR
+            // 🔥 SCALED DOWN APEX LEFT SIDEBAR
             ApexSidebar(
                 currentKey = mainScreenKey,
                 toMainScreen = toMainScreen,
@@ -179,15 +123,14 @@ fun MainScreen(
                 }
             )
 
-            // Content Area (Right Side)
+            // Content Area
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
                     .weight(1f)
-                    .background(Color(0xFF0A0A0F), shape = RoundedCornerShape(topStart = 24.dp, bottomStart = 24.dp))
-                    .clip(RoundedCornerShape(topStart = 24.dp, bottomStart = 24.dp))
+                    .background(Color(0xFF0A0A0F), shape = RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp))
+                    .clip(RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp))
             ) {
-                // Top Right Utility Bar
                 ApexTopRightBar(
                     inLauncherScreen = inLauncherScreen,
                     taskRunning = tasks.isEmpty(),
@@ -212,9 +155,9 @@ fun MainScreen(
                         isExpanded = isTaskMenuExpanded,
                         modifier = Modifier
                             .fillMaxHeight()
-                            .fillMaxWidth(0.4f)
+                            .fillMaxWidth(0.5f)
                             .align(Alignment.CenterEnd)
-                            .padding(all = 16.dp)
+                            .padding(12.dp)
                     ) {
                         changeTasksExpandedState()
                     }
@@ -234,84 +177,37 @@ fun ApexSidebar(
 ) {
     Column(
         modifier = Modifier
-            .width(260.dp)
+            .width(180.dp) // 🔥 Reduced from 260.dp
             .fillMaxHeight()
-            .padding(16.dp)
+            .padding(12.dp) // 🔥 Reduced padding
     ) {
-        // Logo
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 32.dp, start = 8.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 16.dp)) {
             Icon(
-                painter = painterResource(R.drawable.ic_launcher_foreground), // Fallback, we'll customize later
+                painter = painterResource(R.drawable.ic_launcher_foreground),
                 contentDescription = "Logo",
                 tint = Color(0xFF8B5CF6),
-                modifier = Modifier.size(32.dp)
+                modifier = Modifier.size(24.dp)
             )
-            Spacer(modifier = Modifier.width(12.dp))
-            Text(text = "ApexLauncher", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.White)
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = "Apex", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = Color.White)
         }
 
-        // Menu Items
-        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            SidebarItem(
-                icon = Icons.Rounded.Home,
-                label = "Home",
-                isSelected = currentKey == null || currentKey is NormalNavKey.LauncherMain,
-                onClick = toMainScreen
-            )
-            SidebarItem(
-                icon = Icons.Rounded.List,
-                label = "Profiles",
-                isSelected = currentKey is NormalNavKey.VersionsManager,
-                onClick = toProfiles
-            )
-            SidebarItem(
-                icon = Icons.Rounded.Build,
-                label = "Mods",
-                isSelected = false,
-                onClick = {} // Placeholder for future
-            )
-            SidebarItem(
-                icon = Icons.Rounded.ShoppingCart,
-                label = "Resource Packs",
-                isSelected = false,
-                onClick = {} // Placeholder
-            )
-            SidebarItem(
-                icon = Icons.Rounded.Place,
-                label = "Worlds",
-                isSelected = false,
-                onClick = {} // Placeholder
-            )
-            SidebarItem(
-                icon = Icons.Rounded.Person,
-                label = "Servers",
-                isSelected = currentKey is NormalNavKey.Multiplayer,
-                onClick = toServers
-            )
-            SidebarItem(
-                icon = Icons.Rounded.Settings,
-                label = "Settings",
-                isSelected = currentKey is NestedNavKey.Settings,
-                onClick = toSettings
-            )
+        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            SidebarItem(Icons.Rounded.Home, "Home", currentKey == null || currentKey is NormalNavKey.LauncherMain, toMainScreen)
+            SidebarItem(Icons.Rounded.List, "Profiles", currentKey is NormalNavKey.VersionsManager, toProfiles)
+            SidebarItem(Icons.Rounded.Person, "Servers", currentKey is NormalNavKey.Multiplayer, toServers)
+            SidebarItem(Icons.Rounded.Settings, "Settings", currentKey is NestedNavKey.Settings, toSettings)
         }
 
-        // Apex Unleashed Banner
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(180.dp)
-                .background(
-                    brush = Brush.verticalGradient(listOf(Color(0xFF1E103C), Color(0xFF0F0518))),
-                    shape = RoundedCornerShape(16.dp)
-                )
-                .clip(RoundedCornerShape(16.dp))
+                .height(80.dp) // 🔥 Smaller banner
+                .background(Brush.verticalGradient(listOf(Color(0xFF1E103C), Color(0xFF0F0518))), RoundedCornerShape(12.dp))
         ) {
-            Column(modifier = Modifier.padding(16.dp).align(Alignment.BottomStart)) {
-                Text(text = "APEX", fontWeight = FontWeight.Black, fontSize = 24.sp, color = Color.White)
-                Text(text = "UNLEASH", fontWeight = FontWeight.Bold, fontSize = 12.sp, color = Color(0xFF8B5CF6))
-                Text(text = "THE ULTIMATE", fontSize = 10.sp, color = Color(0xFFAAAAAA))
-                Text(text = "EXPERIENCE", fontSize = 10.sp, color = Color(0xFFAAAAAA))
+            Column(modifier = Modifier.padding(12.dp).align(Alignment.BottomStart)) {
+                Text(text = "APEX", fontWeight = FontWeight.Black, fontSize = 16.sp, color = Color.White)
+                Text(text = "UNLEASH", fontWeight = FontWeight.Bold, fontSize = 10.sp, color = Color(0xFF8B5CF6))
             }
         }
     }
@@ -325,15 +221,15 @@ fun SidebarItem(icon: ImageVector, label: String, isSelected: Boolean, onClick: 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(8.dp))
             .background(bgColor)
             .clickable { onClick() }
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            .padding(horizontal = 12.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(imageVector = icon, contentDescription = label, tint = contentColor, modifier = Modifier.size(24.dp))
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(text = label, color = contentColor, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+        Icon(imageVector = icon, contentDescription = label, tint = contentColor, modifier = Modifier.size(20.dp))
+        Spacer(modifier = Modifier.width(12.dp))
+        Text(text = label, color = contentColor, fontSize = 14.sp, fontWeight = FontWeight.Medium)
     }
 }
 
@@ -349,44 +245,38 @@ private fun ApexTopRightBar(
     val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
 
     Row(
-        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Back Button (If not in Home)
         AnimatedVisibility(visible = !inLauncherScreen) {
             IconButton(
                 onClick = { backDispatcher?.onBackPressed() ?: onScreenBack() },
-                modifier = Modifier.background(Color(0xFF1E1E28), shape = RoundedCornerShape(12.dp))
+                modifier = Modifier.background(Color(0xFF1E1E28), shape = RoundedCornerShape(8.dp)).size(36.dp)
             ) {
                 Icon(painter = painterResource(R.drawable.ic_arrow_back), contentDescription = "Back", tint = Color.White)
             }
         }
         if (inLauncherScreen) Spacer(Modifier.width(1.dp))
 
-        // Right side utilities (Downloads, Tasks)
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             AnimatedVisibility(visible = !(isTasksExpanded || taskRunning)) {
                 IconButton(
                     onClick = changeExpandedState,
-                    modifier = Modifier.background(Color(0xFF1E1E28), shape = RoundedCornerShape(12.dp))
+                    modifier = Modifier.background(Color(0xFF1E1E28), shape = RoundedCornerShape(8.dp)).size(36.dp)
                 ) {
                     Icon(painter = painterResource(R.drawable.ic_assignment_filled), contentDescription = "Tasks", tint = Color(0xFF8B5CF6))
                 }
             }
             IconButton(
                 onClick = toDownloadScreen,
-                modifier = Modifier.background(Color(0xFF1E1E28), shape = RoundedCornerShape(12.dp))
+                modifier = Modifier.background(Color(0xFF1E1E28), shape = RoundedCornerShape(8.dp)).size(36.dp)
             ) {
                 Icon(painter = painterResource(R.drawable.ic_download_2_filled), contentDescription = "Downloads", tint = Color.White)
             }
         }
     }
 }
-
-// ==========================================
-// CORE NAVIGATION AND TASK UI (UNCHANGED)
-// ==========================================
 
 @Composable
 private fun NavigationUI(
@@ -406,17 +296,10 @@ private fun NavigationUI(
 
     if (backStack.isNotEmpty()) {
         val navigateToVersions: (Version) -> Unit = { version ->
-            screenBackStackModel.mainScreen.navigateTo(
-                screenKey = NestedNavKey.VersionSettings(version),
-                useClassEquality = true
-            )
+            screenBackStackModel.mainScreen.navigateTo(NestedNavKey.VersionSettings(version), useClassEquality = true)
         }
         val navigateToExport: (Version) -> Unit = { version ->
-            screenBackStackModel.mainScreen.removeAndNavigateTo(
-                remove = NestedNavKey.VersionSettings::class,
-                screenKey = NestedNavKey.VersionExport(version),
-                useClassEquality = true
-            )
+            screenBackStackModel.mainScreen.removeAndNavigateTo(NestedNavKey.VersionSettings::class, NestedNavKey.VersionExport(version), useClassEquality = true)
         }
 
         NavDisplay(
@@ -435,9 +318,7 @@ private fun NavigationUI(
                         onHomePageEvent = { event -> eventViewModel.sendEvent(EventViewModel.Event.HomePage.Event(event)) }
                     )
                 }
-                entry<NestedNavKey.Settings> { key ->
-                    SettingsScreen(key = key, backStackViewModel = screenBackStackModel, openLicenseScreen = { raw -> backStack.navigateTo(NormalNavKey.License(raw)) }, eventViewModel = eventViewModel, submitError = submitError)
-                }
+                entry<NestedNavKey.Settings> { key -> SettingsScreen(key = key, backStackViewModel = screenBackStackModel, openLicenseScreen = { raw -> backStack.navigateTo(NormalNavKey.License(raw)) }, eventViewModel = eventViewModel, submitError = submitError) }
                 entry<NormalNavKey.License> { key -> LicenseScreen(key = key, backStackViewModel = screenBackStackModel) }
                 entry<NormalNavKey.AccountManager> { key -> AccountManageScreen(key = key, backStackViewModel = screenBackStackModel, backToMainScreen = toMainScreen, openLink = { url -> eventViewModel.sendEvent(EventViewModel.Event.OpenLink(url)) }, submitError = submitError) }
                 entry<NormalNavKey.WebScreen> { key -> WebViewScreen(key = key, backStackViewModel = screenBackStackModel, eventViewModel = eventViewModel) }
